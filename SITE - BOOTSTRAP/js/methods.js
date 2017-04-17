@@ -23,20 +23,33 @@ function inserePropriedade(template, propName, propValue) {
   return template;
 }
 
+function constroiMenuDrop(dados) {
+	var menuDrop = '<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">';
+	
+	$ajaxUtils.sendGetRequest(menusDrop, function(menusDrop) {
+    for (var i = 0, max = dados.length; i < max; i++) {
+	  var menu = menusDrop,
+		  tituloMenu = dados[i].titulo;
+       
+	  menu = inserePropriedade(menu, "titulo", tituloMenu);
+            
+      menuDrop += menu;
+    }
+    menuDrop += '</div>';
+    insereHtml("#menu", menuDrop);
+  }, false); // não é um JSON
+}
+
 // constroi a pagina, com os dados recebidos por parametro
 function constroiPagina(dados) {
-	var menuDrop = '<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">';
 	var htmlFinal = '<div class="container-fluid"> <div class="row">';
   // construimos os itens agora
   $ajaxUtils.sendGetRequest(itensHtml, function(itensHtml) {
     for (var i = 0, max = dados.length; i < max; i++) {
-	  var menu = menusDrop,
-		  tituloMenu = dados[i].titulo;
       var html = itensHtml,
           titulo = dados[i].titulo,
 		  texto = dados[i].Conteudo;
           
-	  menu = inserePropriedade(menu, "titulo", tituloMenu);
       html = inserePropriedade(html, "titulo", titulo);
       html = inserePropriedade(html, "texto", texto);
       
@@ -50,3 +63,4 @@ function constroiPagina(dados) {
 // definir a URL (dataUrl)
 // e o metodo constroiPagina
 $ajaxUtils.sendGetRequest(dataUrl, constroiPagina);
+$ajaxUtils.sendGetRequest(dataUrl, constroiMenuDrop);
